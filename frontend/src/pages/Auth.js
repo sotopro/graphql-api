@@ -7,13 +7,14 @@ class AuthPage extends Component {
 	state = {
 		isLogin: true
 	}
+
+	static contextType = AuthContext
+
 	constructor(props) {
 		super(props)
 		this.emailEl = React.createRef()
 		this.passwordEl = React.createRef()
 	}
-
-	static contextType = AuthContext
 
 	switchModeHandler = () => {
 		this.setState(prevState => {
@@ -31,35 +32,35 @@ class AuthPage extends Component {
 
 		let requestBody = {
 			query: `
-				query Login($email: String!, $password: String!) {
-					login(email: $email, password: $password) {
-						userId
-						token
-						tokenExpiration
-					}
-				}
-			`,
+        query Login($email: String!, $password: String!) {
+          login(email: $email, password: $password) {
+            userId
+            token
+            tokenExpiration
+          }
+        }
+      `,
 			variables: {
 				email: email,
 				password: password
 			}
-		};
+		}
 
-		if(!this.state.isLogin) {
+		if (!this.state.isLogin) {
 			requestBody = {
-			query: `
-				mutation CreateUser($email: String!, $password: String!) {
-					createUser(userInput: {email: $email, password: $password) {
-						_id
-						email
-					}
-				}
-				`,
+				query: `
+          mutation CreateUser($email: String!, $password: String!) {
+            createUser(userInput: {email: $email, password: $password}) {
+              _id
+              email
+            }
+          }
+        `,
 				variables: {
 					email: email,
 					password: password
 				}
-		}
+			}
 		}
 
 		fetch('http://localhost:3000/graphql', {
@@ -76,8 +77,12 @@ class AuthPage extends Component {
 				return res.json()
 			})
 			.then(resData => {
-				if(resData.data.login.token) {
-					this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration)
+				if (resData.data.login.token) {
+					this.context.login(
+						resData.data.login.token,
+						resData.data.login.userId,
+						resData.data.login.tokenExpiration
+					)
 				}
 			})
 			.catch(err => {
