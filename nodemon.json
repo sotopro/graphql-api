@@ -1,0 +1,8 @@
+{
+    "env": {
+        "MONGO_USER": "datechno_admin",
+        "MONGO_PWD": "M!14a1523",
+        "MONGO_DB": "datechno_app",
+        "JWT_PASSPHRASE": "MM!14a1523!1M!14a1523M!14a15234M!14a1523a15M!14a152323"
+    }
+}
